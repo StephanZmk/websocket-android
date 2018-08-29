@@ -8,10 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.view.View;
 
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -25,14 +28,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        /*Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         messageList = findViewById(R.id.messageList);
         adapter = new MessageAdapter();
         messageList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        messageList.setAdapter(adapter);
+        messageList.setAdapter(adapter);*/
 
-        rxWebSocket = new RxWebSocket("ws://echo.websocket.org");
+        rxWebSocket = new RxWebSocket("ws://10.1.18.95:1234/");
+        rxWebSocket.connect();
 
         rxWebSocket.onOpen()
                 .subscribeOn(Schedulers.io())
@@ -69,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.make(messageList, "WebSocket failure! " + socketFailureEvent.getException().getMessage(), Snackbar.LENGTH_SHORT).show();
                 }, Throwable::printStackTrace);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+
+
+        /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             final EditText textInput = new EditText(MainActivity.this);
             textInput.setHint("Some message...");
@@ -88,7 +94,19 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .show();
-        });
+        });*/
+    }
+
+    public void sendCoordinates(View view) {
+        EditText xValueEditText = (EditText) findViewById(R.id.xValueEditText);
+        EditText yValueEditText = (EditText) findViewById(R.id.yValueEditText);
+        rxWebSocket.sendMessage(Float.valueOf(xValueEditText.getText().toString()), Float.valueOf(yValueEditText.getText().toString())).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        success -> Log.d("json","success"),
+                        throwable -> Log.d("json","error")
+                );
+        //Log.d("json",xValueEditText.getText() + " " + yValueEditText.getText());
     }
 
     @Override

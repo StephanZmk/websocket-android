@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
+import de.adesso.Beamer;
+import de.adesso.RoadPosVector;
 import hu.agta.rxwebsocket.entities.SocketClosedEvent;
 import hu.agta.rxwebsocket.entities.SocketClosingEvent;
 import hu.agta.rxwebsocket.entities.SocketEvent;
@@ -21,7 +23,6 @@ import io.reactivex.processors.PublishProcessor;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
-import okio.ByteString;
 
 public class RxWebSocket {
 
@@ -116,7 +117,7 @@ public class RxWebSocket {
         disposables.add(connectionDisposable);
     }
 
-    public synchronized Single<Boolean> sendMessage(@NonNull Gson gson, @Nullable Object payload) {
+    /*public synchronized Single<Boolean> sendMessage(@NonNull Gson gson, @Nullable Object payload) {
         return Single.fromCallable(() -> {
             if (webSocket != null) {
                 String jsonBody = new Gson().toJson(payload);
@@ -135,9 +136,23 @@ public class RxWebSocket {
                 throw new RuntimeException("WebSocket not connected!");
             }
         });
+    }*/
+
+    public synchronized Single<Boolean> sendMessage(@Nullable float x, @Nullable float y) {
+        return Single.fromCallable(() -> {
+            if (webSocket != null) {
+                Beamer nB = new Beamer(":1", new RoadPosVector(x,y), 440, 250, "blue", 1, 0, 1);
+                String jsonBody = new Gson().toJson(nB);
+                //String jsonBody = "{ \"clientId\": \":1\", \"message\": \""+x+"\"}";
+                Log.d("json", jsonBody);
+                return webSocket.send(jsonBody);
+            } else {
+                throw new RuntimeException("WebSocket not connected!");
+            }
+        });
     }
 
-    public synchronized Single<Boolean> sendMessage(@NonNull ByteString bytes) {
+    /*public synchronized Single<Boolean> sendMessage(@NonNull ByteString bytes) {
         return Single.fromCallable(() -> {
             if (webSocket != null) {
                 return webSocket.send(bytes);
@@ -145,7 +160,7 @@ public class RxWebSocket {
                 throw new RuntimeException("WebSocket not connected!");
             }
         });
-    }
+    }*/
 
     public synchronized Single<Boolean> close() {
         return Single.fromCallable(() -> {
