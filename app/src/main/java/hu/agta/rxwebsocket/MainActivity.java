@@ -100,11 +100,12 @@ public class MainActivity extends AppCompatActivity {
     public void sendCoordinates(View view) {
         EditText xValueEditText = (EditText) findViewById(R.id.xValueEditText);
         EditText yValueEditText = (EditText) findViewById(R.id.yValueEditText);
-        rxWebSocket.sendMessage(Float.valueOf(xValueEditText.getText().toString()), Float.valueOf(yValueEditText.getText().toString())).subscribeOn(Schedulers.io())
+        EditText rotationEditText = (EditText) findViewById(R.id.rotationEditText);
+        rxWebSocket.sendMessage(Float.valueOf(xValueEditText.getText().toString()), Float.valueOf(yValueEditText.getText().toString()), Float.valueOf(rotationEditText.getText().toString())).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        success -> Log.d("json","success"),
-                        throwable -> Log.d("json","error")
+                        success -> Log.d("SEND MESSAGE","success"),
+                        throwable -> Log.d("SEND MESSAGE","error")
                 );
         //Log.d("json",xValueEditText.getText() + " " + yValueEditText.getText());
     }

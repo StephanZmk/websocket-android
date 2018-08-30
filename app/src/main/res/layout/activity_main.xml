@@ -26,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="numberSigned"
-        android:text=""
+        android:text="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,9 +49,32 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="numberSigned"
-        android:text=""
+        android:text="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/xValueEditText" />
+
+    <TextView
+        android:id="@+id/rotationTextView"
+        android:layout_width="90dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Rotation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yTextView" />
+
+    <EditText
+        android:id="@+id/rotationEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="numberSigned"
+        android:text="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yValueEditText" />
 
     <Button
         android:id="@+id/sendCoordinates"
@@ -62,5 +85,5 @@
         android:onClick="sendCoordinates"
         android:text="Send"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yValueEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/rotationEditText" />
 </android.support.constraint.ConstraintLayout>

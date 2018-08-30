@@ -138,10 +138,10 @@ public class RxWebSocket {
         });
     }*/
 
-    public synchronized Single<Boolean> sendMessage(@Nullable float x, @Nullable float y) {
+    public synchronized Single<Boolean> sendMessage(@Nullable float x, @Nullable float y, @Nullable float rotation) {
         return Single.fromCallable(() -> {
             if (webSocket != null) {
-                Beamer nB = new Beamer(":1", new RoadPosVector(x,y), 440, 250, "blue", 1, 0, 1);
+                Beamer nB = new Beamer(":1", new RoadPosVector(x,y), 440, 250, "blue", 1, rotation, 1);
                 String jsonBody = new Gson().toJson(nB);
                 //String jsonBody = "{ \"clientId\": \":1\", \"message\": \""+x+"\"}";
                 Log.d("json", jsonBody);
